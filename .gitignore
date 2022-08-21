@@ -1,5 +1,6 @@
 # To ignore practice files
 Practice.ipynb
+practicedb.txt
 
 # For sensitive info
 config.py
