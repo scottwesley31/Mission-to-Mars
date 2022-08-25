@@ -15,6 +15,7 @@ def scrape_all():
 
     # Set news title and paragraph variables; use mars_news function to pull news_title and news_paragraph
     news_title, news_paragraph = mars_news(browser)
+    hemisphere_image_urls = hemisphere_data(browser)
 
     # Run all scraping functions and store results in dictionary
     data = {
@@ -22,7 +23,8 @@ def scrape_all():
         "news_paragraph": news_paragraph,
         "featured_image": featured_image(browser),
         "facts": mars_facts(),
-        "last_modified": dt.datetime.now()
+        "last_modified": dt.datetime.now(),
+        "hemispheres": hemisphere_image_urls
     }
 
     # Stop webdriver and return data
@@ -107,6 +109,35 @@ def mars_facts():
 
     # Convert df back into HTML code, add bootstrap
     return df.to_html()
+
+# Create a function that will scrape the hemisphere data
+def hemisphere_data():
+    # Use browser to visit the URL 
+    url = 'https://marshemispheres.com/'
+    browser.visit(url)
+    hemisphere_image_urls = []
+
+    # Parse the resulting html with soup
+    html = browser.html
+    img_soup = soup(html, 'html.parser')
+
+    # Isolate the section of HTML with hemisphere data
+    div_items = img_soup.find_all('div', class_='item')
+    hemisphere_image_urls = []
+
+    # Add try/except handling
+    try:
+        for div_item in div_items:
+            dict = {}
+            img_elem = browser.find_by_css('a.product-item h3')
+            img_elem.click()
+            img_URL = browser.find_by_text('Sample')['href']
+            dict['img_url'] = img_URL
+            browser.back()
+            dict['title'] = div_item.find('h3').text
+            hemisphere_image_urls.append(dict)
+    except:
+        return None
 
 # Necessary Flask statement for it to run properly (also in app.py)
 if __name__ == "__main__":
