@@ -133,7 +133,7 @@ browser.quit()
 
 # # Challenge Starter Code
 
-# In[16]:
+# In[2]:
 
 
 # Import Splinter, BeautifulSoup, and Pandas
@@ -143,7 +143,7 @@ import pandas as pd
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-# In[17]:
+# In[3]:
 
 
 # Set the executable path and initialize Splinter
@@ -153,7 +153,7 @@ browser = Browser('chrome', **executable_path, headless=False)
 
 # ### Visit the NASA Mars News Site
 
-# In[18]:
+# In[4]:
 
 
 # Visit the mars nasa news site
@@ -164,7 +164,7 @@ browser.visit(url)
 browser.is_element_present_by_css('div.list_text', wait_time=1)
 
 
-# In[19]:
+# In[5]:
 
 
 # Convert the browser html to a soup object and then quit the browser
@@ -174,13 +174,13 @@ news_soup = soup(html, 'html.parser')
 slide_elem = news_soup.select_one('div.list_text')
 
 
-# In[20]:
+# In[6]:
 
 
 slide_elem.find('div', class_='content_title')
 
 
-# In[21]:
+# In[7]:
 
 
 # Use the parent element to find the first a tag and save it as `news_title`
@@ -188,7 +188,7 @@ news_title = slide_elem.find('div', class_='content_title').get_text()
 news_title
 
 
-# In[22]:
+# In[8]:
 
 
 # Use the parent element to find the paragraph text
@@ -198,7 +198,7 @@ news_p
 
 # ### JPL Space Images Featured Image
 
-# In[23]:
+# In[9]:
 
 
 # Visit URL
@@ -206,7 +206,7 @@ url = 'https://spaceimages-mars.com'
 browser.visit(url)
 
 
-# In[24]:
+# In[10]:
 
 
 # Find and click the full image button
@@ -215,7 +215,7 @@ full_image_elem.click()
 # full_image_elem
 
 
-# In[25]:
+# In[11]:
 
 
 # Parse the resulting html with soup
@@ -224,7 +224,7 @@ img_soup = soup(html, 'html.parser')
 img_soup
 
 
-# In[26]:
+# In[12]:
 
 
 # find the relative image url
@@ -232,7 +232,7 @@ img_url_rel = img_soup.find('img', class_='fancybox-image').get('src')
 img_url_rel
 
 
-# In[27]:
+# In[13]:
 
 
 # Use the base url to create an absolute url
@@ -242,14 +242,14 @@ img_url
 
 # ### Mars Facts
 
-# In[28]:
+# In[14]:
 
 
 df = pd.read_html('https://galaxyfacts-mars.com')[0]
 df.head()
 
 
-# In[29]:
+# In[15]:
 
 
 df.columns=['Description', 'Mars', 'Earth']
@@ -257,7 +257,7 @@ df.set_index('Description', inplace=True)
 df
 
 
-# In[30]:
+# In[16]:
 
 
 df.to_html()
@@ -267,7 +267,7 @@ df.to_html()
 
 # ### Hemispheres
 
-# In[31]:
+# In[17]:
 
 
 # 1. Use browser to visit the URL 
@@ -277,7 +277,7 @@ url = 'https://marshemispheres.com/'
 browser.visit(url)
 
 
-# In[32]:
+# In[18]:
 
 
 # Parse the resulting html with soup
@@ -286,7 +286,7 @@ img_soup = soup(html, 'html.parser')
 img_soup
 
 
-# In[33]:
+# In[19]:
 
 
 # Scrape for just one image url 
@@ -294,7 +294,7 @@ img_item = img_soup.find_all('div', class_='item')[0].find('a')['href']
 img_item
 
 
-# In[34]:
+# In[20]:
 
 
 # Scrape for all of the image urls
@@ -307,14 +307,14 @@ for img in img_items:
     print(img_url)
 
 
-# In[35]:
+# In[21]:
 
 
 # List comprehension
 [print(img.find('a')['href']) for img in img_items]
 
 
-# In[36]:
+# In[22]:
 
 
 # Use find_by_css to navigate to full-resolution page
@@ -322,7 +322,7 @@ div_css = browser.find_by_css('div[class="item"]')[0]
 div_css.click()
 
 
-# In[37]:
+# In[23]:
 
 
 # Scrape for just one image title
@@ -330,7 +330,7 @@ img_title = img_soup.find_all('div', class_='item')[0].find('h3').text
 img_title
 
 
-# In[38]:
+# In[24]:
 
 
 # Scrape for all of the image titles
@@ -340,7 +340,7 @@ for title in img_titles:
     print(img_title)
 
 
-# In[39]:
+# In[25]:
 
 
 # Figure out how to navigate to the HTML link to the full-size image and click it
@@ -351,7 +351,7 @@ full_image_elem.click()
 # Use index to navigate to each individual page
 
 
-# In[40]:
+# In[26]:
 
 
 # Figure out how to click on the jpeg URL
@@ -360,7 +360,7 @@ full_image_elem.click()
 browser.back()
 
 
-# In[41]:
+# In[27]:
 
 
 # Create a for loop to grab all the full image URLs
@@ -372,25 +372,27 @@ for i in range(4):
     browser.back()
 
 
-# In[42]:
+# In[35]:
 
 
 div_items = img_soup.find_all('div', class_='item')
 hemisphere_image_urls = []
+i = 0
 for div_item in div_items:
     dict = {}
-    img_elem = browser.find_by_css('a.product-item h3')
+    img_elem = browser.find_by_css('a.product-item h3')[i]
     img_elem.click()
     img_URL = browser.find_by_text('Sample')['href']
     dict['img_url'] = img_URL
     browser.back()
     dict['title'] = div_item.find('h3').text
     hemisphere_image_urls.append(dict)
+    i += 1
 
 hemisphere_image_urls
 
 
-# In[43]:
+# In[38]:
 
 
 # 2. Create a list to hold the images and titles.
@@ -406,9 +408,10 @@ img_soup = soup(html, 'html.parser')
 div_items = img_soup.find_all('div', class_='item')
 hemisphere_image_urls = []
 
+i = 0
 for div_item in div_items:
     dict = {}
-    img_elem = browser.find_by_css('a.product-item h3')
+    img_elem = browser.find_by_css('a.product-item h3')[i]
     img_elem.click()
     img_URL = browser.find_by_text('Sample')['href']
     dict['img_url'] = img_URL
@@ -416,18 +419,25 @@ for div_item in div_items:
     title = div_item.find('h3').text
     dict['title'] = title
     hemisphere_image_urls.append(dict)
+    i += 1
 
 
-# In[44]:
+# In[39]:
 
 
 # 4. Print the list that holds the dictionary of each image url and title.
 hemisphere_image_urls
 
 
-# In[45]:
+# In[31]:
 
 
 # 5. Quit the browser
 browser.quit()
+
+
+# In[ ]:
+
+
+
 
