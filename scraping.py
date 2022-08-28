@@ -128,9 +128,10 @@ def hemisphere_data(browser):
 
     # Add try/except handling
     try:
+        i = 0
         for div_item in div_items:
             dict = {}
-            img_elem = browser.find_by_css('a.product-item h3')
+            img_elem = browser.find_by_css('a.product-item h3')[i]
             img_elem.click()
             img_URL = browser.find_by_text('Sample')['href']
             dict['img_url'] = img_URL
@@ -138,6 +139,7 @@ def hemisphere_data(browser):
             title = div_item.find('h3').text
             dict['title'] = title
             hemisphere_image_urls.append(dict)
+            i += 1
         return hemisphere_image_urls
     except:
         return None
