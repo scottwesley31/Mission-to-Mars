@@ -25,6 +25,7 @@ def scrape_all():
         "facts": mars_facts(),
         "last_modified": dt.datetime.now(),
         "hemispheres": hemisphere_image_urls
+        # "hemispheres:"{hemisphere_image_urls}
     }
 
     # Stop webdriver and return data
@@ -111,7 +112,7 @@ def mars_facts():
     return df.to_html()
 
 # Create a function that will scrape the hemisphere data
-def hemisphere_data():
+def hemisphere_data(browser):
     # Use browser to visit the URL 
     url = 'https://marshemispheres.com/'
     browser.visit(url)
@@ -134,8 +135,10 @@ def hemisphere_data():
             img_URL = browser.find_by_text('Sample')['href']
             dict['img_url'] = img_URL
             browser.back()
-            dict['title'] = div_item.find('h3').text
+            title = div_item.find('h3').text
+            dict['title'] = title
             hemisphere_image_urls.append(dict)
+        return hemisphere_image_urls
     except:
         return None
 

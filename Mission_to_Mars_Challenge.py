@@ -413,7 +413,8 @@ for div_item in div_items:
     img_URL = browser.find_by_text('Sample')['href']
     dict['img_url'] = img_URL
     browser.back()
-    dict['title'] = div_item.find('h3').text
+    title = div_item.find('h3').text
+    dict['title'] = title
     hemisphere_image_urls.append(dict)
 
 
