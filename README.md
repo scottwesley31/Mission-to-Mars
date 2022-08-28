@@ -25,4 +25,5 @@ A section containing four hemisphere images of Mars and their associated names d
 Here are screenshots of the final product (of data scraped on 8/28/2022):
 
 ![website_1](https://user-images.githubusercontent.com/107309793/187079791-6b94630a-ada0-4f2f-a551-4af2326ee48e.png)
-![website_4](https://user-images.githubusercontent.com/107309793/187079891-fe9be7b3-0a4d-44c8-9598-b70f4a549bd0.png)
+![website_2](https://user-images.githubusercontent.com/107309793/187082334-c884354e-d1e7-4ffd-aa03-6225186c9f1f.png)
+![website_3](https://user-images.githubusercontent.com/107309793/187082338-4fbf13bc-9740-496f-a07d-f7c94ae73fa3.png)
